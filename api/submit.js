@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -6,7 +6,7 @@ export default async function handler(req, res) {
 
   const { experience, portfolio, contact, handle } = req.body || {};
 
-  // Basic validation (prevents abuse / garbage input)
+  // Basic validation
   if (
     !experience || typeof experience !== 'string' || experience.length > 50 ||
     !portfolio || typeof portfolio !== 'string' || portfolio.length > 50 ||
@@ -16,8 +16,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid input' });
   }
 
-  const message = `
-📩 New Mason Ledger Application
+  const message =
+`📩 New Mason Ledger Application
 
 🧠 Experience: ${experience}
 💼 Portfolio: ${portfolio}
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({ success: true });
   } catch (err) {
-    console.error(err);
+    console.error('Telegram error:', err);
     return res.status(500).json({ error: 'Failed to send Telegram message' });
   }
-}
+};
